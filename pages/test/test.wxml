@@ -1,0 +1,41 @@
+<view class="content">
+  <!--banner-->
+    <view class="swiper-container">
+      <swiper interval="5000" duration="500" current="{{swiperCurrent}}" bindchange="swiperChange" class="swiper">
+        <block wx:for="{{slider}}" wx:key="index">
+          <swiper-item class="dot{{index == swiperCurrent ? ' active' : ''}}" id="{{index}}">
+            <image src="{{item.picUrl}}" data-src="{{item.picUrl}}" class="img" bindtap="previewImage"></image>
+            <view class="swipe-item-info">
+              <image src="{{userInfo.avatarUrl}}" class='headImg'></image>
+              <text class="name">{{userInfo.nickName}}</text>
+              <text class="comment">{{myCommentValue}}</text>
+              <text class="tips">扫码查看案件详情 | 生成你的专属海报</text>
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+    <view class="sliderTips">点击预览大图，长按大图保存图片，或发送好友</view>
+    <view class="dots">
+      <scroll-view class="dots-list-container" scroll-x>
+        <view wx:for="{{slider}}" wx:key="index" class="dots-list-item {{index == swiperCurrent ? ' active' : ''}}"                                  bindtap="smallImgClick" id="{{index}}">
+          <image src="{{item.picUrl}}" class="imgs"></image>
+          <image class="smallImgChecked" src="../../img/fullStar.png"></image>
+        </view>
+      </scroll-view>
+    </view>
+    <view class="footer-btn">
+      <button class="add_comment" bindtap="showAddComment">加评论</button>
+      <button class="save_image">保存图片</button>
+    </view>
+    <view class="addComments" wx:if="{{addCommentsFlag}}">
+      <view class="comment-area">
+      <textarea class="textarea" maxlength='60' bindinput='bindCommentInput' value="{{myCommentValue}}"></textarea>
+      <text class="limit">{{myCommentLength}}/60</text>
+      </view>
+      <view class="comment-btn">
+        <button bindtap="cancelAddComment">取消</button>
+        <button bindtap="sureAddComment">添加</button>
+      </view>
+    </view>
+</view>

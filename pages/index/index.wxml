@@ -1,0 +1,26 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view class="usermotto">
+    <navigator class="user-motto" url="../test/test">{{motto}}</navigator>
+  </view>
+  <view>
+    <button class="myname" hover-class='my-hover' bindtap="changeName">{{myname}}</button>
+  </view>
+  <view>
+    <header phone="{{phone}}" bind:myevent="onMyEvent">
+      <view>我是父组件写入子组件slot里的内容</view>
+    </header>
+  </view>
+  <view>
+    <scroll-view class="scroll"></scroll-view>
+  </view> -->
+  <!-- <view wx:for="{{array}}">{{item}}{{index}}</view> -->
+ <navigator url="../test/test">进入分享海报页面</navigator>
+</view>

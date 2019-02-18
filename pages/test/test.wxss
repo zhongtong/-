@@ -1,0 +1,202 @@
+/* pages/test/test.wxss */
+
+page {
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+}
+
+/*banner轮播  */
+
+.swiper-container {
+  padding-bottom: 20rpx;
+}
+
+.swiper-container .swiper {
+  width: 375rpx;
+  height: 667rpx;
+  margin: 0 auto;
+  margin-top: 60rpx;
+  box-shadow: 0 2rpx 8rpx 0 #ccc;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.swiper-container .swiper .swipe-item-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 140rpx;
+  background: #fff;
+}
+
+.swiper-container .swiper .img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+}
+
+.swiper-container .swiper .headImg {
+  width: 50rpx;
+  height: 50rpx;
+  position: absolute;
+  top: 20rpx;
+  left: 40rpx;
+}
+
+.swiper-container .swiper .name {
+  font-size: 17rpx;
+  color: #0055a7;
+  position: absolute;
+  top: 80rpx;
+  left: 10rpx;
+  width: 110rpx;
+  text-align: center;
+}
+
+.comment {
+  font-size: 17rpx;
+  color: #444;
+  position: absolute;
+  top: 20rpx;
+  left: 105rpx;
+  width: 210rpx;
+  height: 80rpx;
+}
+
+.tips {
+  font-size: 15rpx;
+  color: #aaa;
+  position: absolute;
+  top: 110rpx;
+  left: 10rpx;
+  width: 100%;
+  text-align: center;
+}
+
+.sliderTips {
+  color: #aaa;
+  font-size: 24rpx;
+  text-align: center;
+  margin-top: 40rpx;
+  margin-bottom: 20rpx;
+}
+
+.dots {
+  height: 190rpx;
+}
+
+.dots-list-container {
+  display: flex;
+  white-space: nowrap;
+  width: 100%;
+  height: 100%;
+}
+
+.dots-list-item {
+  width: 70rpx;
+  height: 124rpx;
+  margin: 0 20rpx;
+  display: inline-block;
+  margin-top: 25rpx;
+  position: relative;
+}
+
+.dots-list-item .imgs {
+  width: 100%;
+  display: block;
+  height: 100%;
+}
+
+.dots-list-item.active {
+  top: -20rpx;
+  box-shadow: 0 2rpx 8rpx 0 rgba(0, 0, 0, 0.6);
+}
+
+.dots-list-item.active .smallImgChecked {
+  display: block;
+}
+
+.smallImgChecked {
+  width: 25rpx;
+  height: 25rpx;
+  position: absolute;
+  top: 6rpx;
+  left: 40rpx;
+  display: none;
+}
+
+.footer-btn button {
+  width: 290rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 32rpx;
+  border-radius: 40rpx;
+  border: 1rpx solid #188ecf;
+  background-color: #fff;
+  color: #188ecf;
+  float: left;
+  margin: 0 38rpx;
+}
+
+.addComments {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+
+.addComments .comment-area {
+  border-top: 1px solid #ccc;
+  margin-top: 20rpx;
+}
+
+.addComments .textarea {
+  margin: 0 auto;
+  padding: 10rpx 0;
+  color: #455666;
+  font-size: 30rpx;
+}
+
+.addComments .limit {
+  text-align: right;
+  display: block;
+  padding-right: 20rpx;
+  font-size: 28rpx;
+  color: #aaa;
+  margin-bottom:20rpx;
+}
+
+.addComments .comment-btn button {
+  width: 290rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 32rpx;
+  border-radius: 40rpx;
+  border: 1rpx solid #188ecf;
+  background-color: #fff;
+  color: #188ecf;
+  float: left;
+  margin: 0 38rpx;
+}

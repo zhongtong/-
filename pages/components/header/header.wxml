@@ -1,0 +1,8 @@
+<!--pages/components/header/header.wxml-->
+<view>
+  <text bindtap='clickHeader'>这是公用header</text>
+  <view>{{phone}}</view>
+  <button bindtap="change">向父组件传递参数</button>
+  <icon type="success" size="22"/>
+  <slot></slot>
+</view>
