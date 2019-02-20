@@ -1,5 +1,23 @@
 /* pages/test/test.wxss */
-
+.placeholderStyle{
+  color:#aaa;
+}
+::selection {   
+    background:#d3d3d3;    
+    color:#555;   
+} 
+canvas {
+   position: fixed;
+   display: block !important;
+   width: 1125px;
+   height: 2001px;
+   /* margin-left: -700rpx; */
+   left: 0;
+   top: 100%;
+}
+.onShowCanvas {
+  top:0;
+}
 page {
   width: 100%;
   height: 100%;
@@ -15,6 +33,7 @@ page {
   right: 0;
   display: flex;
   flex-direction: column;
+  overflow-y:auto;
 }
 
 a {
@@ -74,13 +93,14 @@ a {
 }
 
 .comment {
-  font-size: 17rpx;
+  font-size: 14rpx;
   color: #444;
   position: absolute;
   top: 20rpx;
   left: 105rpx;
   width: 210rpx;
   height: 80rpx;
+  text-align: justify;
 }
 
 .tips {
@@ -115,7 +135,7 @@ a {
 .dots-list-item {
   width: 70rpx;
   height: 124rpx;
-  margin: 0 20rpx;
+  margin: 0 27rpx;
   display: inline-block;
   margin-top: 25rpx;
   position: relative;
@@ -144,7 +164,12 @@ a {
   left: 40rpx;
   display: none;
 }
-
+.footer-btn{
+  height:200rpx;
+  display: flex;
+  align-items:center;
+  justify-content:space-around;
+}
 .footer-btn button {
   width: 290rpx;
   height: 80rpx;
@@ -154,8 +179,6 @@ a {
   border: 1rpx solid #188ecf;
   background-color: #fff;
   color: #188ecf;
-  float: left;
-  margin: 0 38rpx;
 }
 
 .addComments {

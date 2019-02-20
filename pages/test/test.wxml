@@ -2,12 +2,12 @@
   <!--banner-->
     <view class="swiper-container">
       <swiper interval="5000" duration="500" current="{{swiperCurrent}}" bindchange="swiperChange" class="swiper">
-        <block wx:for="{{slider}}" wx:key="index">
+        <block wx:for="{{previewImageList}}" wx:key="index">
           <swiper-item class="dot{{index == swiperCurrent ? ' active' : ''}}" id="{{index}}">
-            <image src="{{item.picUrl}}" data-src="{{item.picUrl}}" class="img" bindtap="previewImage"></image>
+            <image src="{{item}}" data-src="{{item}}" class="img" bindtap="previewImage"></image>
             <view class="swipe-item-info">
-              <image src="{{userInfo.avatarUrl}}" class='headImg'></image>
-              <text class="name">{{userInfo.nickName}}</text>
+              <image src="{{headImgUrl}}" class='headImg'></image>
+              <text class="name">{{name}}</text>
               <text class="comment">{{myCommentValue}}</text>
               <text class="tips">扫码查看案件详情 | 生成你的专属海报</text>
             </view>
@@ -18,8 +18,8 @@
     <view class="sliderTips">点击预览大图，长按大图保存图片，或发送好友</view>
     <view class="dots">
       <scroll-view class="dots-list-container" scroll-x>
-        <view wx:for="{{slider}}" wx:key="index" class="dots-list-item {{index == swiperCurrent ? ' active' : ''}}"                                  bindtap="smallImgClick" id="{{index}}">
-          <image src="{{item.picUrl}}" class="imgs"></image>
+        <view wx:for="{{previewImageList}}" wx:key="index" class="dots-list-item {{index == swiperCurrent ? ' active' : ''}}"                                  bindtap="smallImgClick" id="{{index}}">
+          <image src="{{item}}" class="imgs"></image>
           <image class="smallImgChecked" src="../../img/fullStar.png"></image>
         </view>
       </scroll-view>
@@ -30,7 +30,15 @@
     </view>
     <view class="addComments" wx:if="{{addCommentsFlag}}">
       <view class="comment-area">
-      <textarea class="textarea" maxlength='60' bindinput='bindCommentInput' value="{{myCommentValue}}"></textarea>
+      <textarea class="textarea" 
+                maxlength='60' 
+                bindinput='bindCommentInput' 
+                value="{{myCommentValue}}
+                focus='{{focus}}'
+                selection-start='{{selection_start}}'
+                selection-end='{{selection_end}}'
+                placeholder='请输入评论'
+                placeholder-class='placeholderStyle'></textarea>
       <text class="limit">{{myCommentLength}}/60</text>
       </view>
       <view class="comment-btn">
@@ -39,3 +47,5 @@
       </view>
     </view>
 </view>
+<!-- 绘图的canvas -->
+<canvas canvas-id="sharePoster" class="{{onShowCanvas ? 'onShowCanvas' : ''}}"></canvas>
