@@ -106,7 +106,9 @@ Page({
   //     })
   //   }
   // },
-  previewImage(e) {
+  previewImage(saveDirect) {
+    //如果不给参数saveDirect代表是预览图片
+    //如果给了值saveDirect = true,代表直接下载保存图片
     wx.showLoading({
       title: '海报生成中',
       mask: true
@@ -135,8 +137,8 @@ Page({
       headImg_x = 3 * 65,
       headImg_y = 3 * 583,
       line_x = 3 * 110, //评论区x
-      line_y = 3 * 575, //评论区首行y
-      lineArray = utils.canvasBreakLine(that.data.myCommentValue, ctx, 3 * 160, 3 * 14) //评论多行文本换行
+      line_y = 3 * 575,//评论区首行y
+      lineArray = utils.canvasBreakLine(that.data.myCommentValue, ctx, 3 * 210, 3 * 14) //评论多行文本换行
     switch (this.data.name.length) {
       case 1:
         name_x = 3 * 55;
@@ -167,48 +169,57 @@ Page({
         ctx.setFillStyle('#fff')
         ctx.fill()
         //画二维码
-        ctx.drawImage(that.data.codeImageUrl, code_x, code_y, code_width, code_height)
-        //画二维码提示
-        ctx.setFillStyle('#ccc')
-        ctx.setFontSize(3 * 13)
-        ctx.fillText('扫码查看案件详情 | 生成你的专属海报', 3 * 80, 3 * 650)
-        //画姓名
-        ctx.setFillStyle(nameColor)
-        ctx.setFontSize(3 * 18)
-        ctx.fillText(that.data.name, name_x, name_y)
-        //画头像
-        wx.downloadFile({
-          url: that.data.headImgUrl,
-          success(res) {
-            ctx.save()
-            ctx.beginPath()
-            ctx.arc(headImg_x, headImg_y, 3 * 25, 0, 2 * Math.PI)
-            ctx.closePath();
-            ctx.fill();
-            ctx.clip()
-            ctx.drawImage(res.tempFilePath, 3 * 40, 3 * 558, 3 * 50, 3 * 50)
-            ctx.restore()
-            lineArray.forEach(function(item, index) {
-              ctx.setFillStyle(commentColor)
-              ctx.setFontSize(3 * 14)
-              ctx.fillText(item, line_x, line_y + 3 * 17 * index)
-            })
-            wx.getImageInfo({
-              src: that.data.miniProgramLogoUrl,
+        wx.getImageInfo({
+          src: that.data.codeImageUrl,
+          success(codeImage) {
+            ctx.drawImage(codeImage.path, code_x, code_y, code_width, code_height)
+            //画二维码提示
+            ctx.setFillStyle('#ccc')
+            ctx.setFontSize(3 * 13)
+            ctx.fillText('扫码查看案件详情 | 生成你的专属海报', 3 * 80, 3 * 650)
+            //画姓名
+            ctx.setFillStyle(nameColor)
+            ctx.setFontSize(3 * 18)
+            ctx.fillText(that.data.name, name_x, name_y)
+            //画头像
+            wx.downloadFile({
+              url: that.data.headImgUrl,
               success(res) {
-                if(that.data.myCommentValue.length == 0){
-                  ctx.drawImage(res.path,logo_x,logo_y,logo_width,logo_height)
-                }
-                ctx.draw(false, () => {
-                  //生成图片
-                  that.canvasToTempFilePath(false)
+                ctx.save()
+                ctx.beginPath()
+                ctx.arc(headImg_x, headImg_y, 3 * 25, 0, 2 * Math.PI)
+                ctx.closePath();
+                ctx.fill();
+                ctx.clip()
+                ctx.drawImage(res.tempFilePath, 3 * 40, 3 * 558, 3 * 50, 3 * 50)
+                ctx.restore()
+                //画评论
+                lineArray.forEach(function (item, index) {
+                  ctx.setFillStyle(commentColor)
+                  ctx.setFontSize(3 * 14)
+                  ctx.fillText(item, line_x, line_y + 3 * 17 * index)
                 })
+                wx.getImageInfo({
+                  src: that.data.miniProgramLogoUrl,
+                  success(res) {
+                    if (that.data.myCommentValue.length == 0) {
+                      ctx.drawImage(res.path, logo_x, logo_y, logo_width, logo_height)
+                    }
+                    ctx.draw(false, () => {
+                      //生成图片
+                      that.canvasToTempFilePath(saveDirect)
+                    })
+                  },
+                  fail(err) {
+                    wx.hideLoading()
+                  }
+                })
+
               },
               fail(err) {
                 wx.hideLoading()
               }
             })
-            
           },
           fail(err) {
             wx.hideLoading()
@@ -231,12 +242,72 @@ Page({
       destHeight: 3 * 667,
       canvasId: 'sharePoster',
       success(res) {
-        that.scanImage(res.tempFilePath)
+        let tempFilePath = res.tempFilePath
+        if (saveDirect === true) {//直接保存图片
+          wx.getSetting({//判断是否有权限
+            success(res){
+              if(!res.authSetting['scope.writePhotosAlbum']){
+                wx.hideLoading()
+                wx.authorize({//获取授权
+                  scope: 'scope.writePhotosAlbum',
+                  success(res) {//有权限
+                    that.saveToAlbum(tempFilePath)
+                  },
+                  fail(err) {//无权限
+                    //请求权限
+                    wx.showModal({
+                      title: '无保存权限',
+                      content: '请在设置中打开保存到相册权限',
+                      success(res) {
+                        if(res.confirm){//用户点击确认
+                            wx.openSetting({
+                              success(setting){
+                                if (setting.authSetting['scope.writePhotosAlbum']){
+                                  that.saveToAlbum(tempFilePath)
+                                }
+                              }
+                            })
+                        }else if(res.cancel){//用户点击取消
+                            wx.hideLoading()
+                        }
+                      }
+                    })
+                  }
+                })
+              }else{
+                wx.hideLoading()
+                that.saveToAlbum(tempFilePath)
+              }
+            }
+          })
+        }else{
+          //预览图片
+          that.scanImage(tempFilePath)
+        }
       },
       fail(){
         wx.showToast({
           title: '操作失败',
           icon: 'fail',
+          duration: 1500
+        })
+      }
+    })
+  },
+  saveToAlbum(tempFilePath){
+    wx.saveImageToPhotosAlbum({
+      filePath: tempFilePath,
+      success(res){
+        wx.showToast({
+          title: '保存成功',
+          icon: 'success',
+          duration: 1500
+        })
+      },
+      fail(err){
+        wx.showToast({
+          title: '保存失败',
+          icon: 'none',
           duration: 1500
         })
       }
@@ -256,6 +327,9 @@ Page({
         wx.hideLoading()
       }
     })
+  },
+  saveToImage () {
+    this.previewImage(true)
   },
   showAddComment(e) {
     this.setData({

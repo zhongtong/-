@@ -26,7 +26,7 @@
     </view>
     <view class="footer-btn">
       <button class="add_comment" bindtap="showAddComment">加评论</button>
-      <button class="save_image">保存图片</button>
+      <button class="save_image" bindtap="saveToImage">保存图片</button>
     </view>
     <view class="addComments" wx:if="{{addCommentsFlag}}">
       <view class="comment-area">

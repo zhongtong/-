@@ -82,6 +82,7 @@ a {
   position: absolute;
   top: 20rpx;
   left: 40rpx;
+  border-radius:50%;
 }
 
 .swiper-container .swiper .name {
