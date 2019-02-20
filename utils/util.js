@@ -13,7 +13,7 @@ const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : '0' + n
 }
-//canvas绘制多行文本换行
+//canvas绘制多行文本换行对齐
 function canvasBreakLine(text,ctx,wrapperWidth,fontSize){
   let lineArray = []
   let textareaWidth = Math.floor(wrapperWidth / fontSize)

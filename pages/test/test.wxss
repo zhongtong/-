@@ -45,14 +45,16 @@ a {
 /*banner轮播  */
 
 .swiper-container {
-  padding-bottom: 20rpx;
+  width:100%;
+  flex:1;
+  display: flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .swiper-container .swiper {
   width: 375rpx;
   height: 667rpx;
-  margin: 0 auto;
-  margin-top: 60rpx;
   box-shadow: 0 2rpx 8rpx 0 #ccc;
   padding: 20rpx;
   box-sizing: border-box;
@@ -180,7 +182,10 @@ a {
   background-color: #fff;
   color: #188ecf;
 }
-
+.footer-btn .save_image{
+  background: #188ecf;
+  color:#fff;
+}
 .addComments {
   position: fixed;
   top: 0;
@@ -222,4 +227,8 @@ a {
   color: #188ecf;
   float: left;
   margin: 0 38rpx;
+}
+.addComments .comment-btn .sure_add_comment{
+  background: #188ecf;
+  color:#fff;
 }

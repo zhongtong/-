@@ -18,7 +18,7 @@ Page({
     focus: false, //是否获得焦点
     selection_start: -1, //选中起点
 
-    
+
     selection_end: -1, //选中终点
     previewImageList: [
       config.base_path + '/www/alyp/img/sharePoster_1.png',
@@ -31,10 +31,11 @@ Page({
       config.base_path + '/www/alyp/img/sharePoster_8.png'
     ],
     codeImageUrl: config.base_path + '/www/public/img/code.png',
+    miniProgramLogoUrl: config.base_path + '/www/alyp/img/miniProgramLogo.png',
     onShowCanvas: false
 
   },
-  onLoad: function() {
+  onLoad() {
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -69,8 +70,7 @@ Page({
       })
     }
   },
-  getUserInfo: function(e) {
-    console.log(e)
+  getUserInfo(e) {
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
@@ -81,22 +81,19 @@ Page({
   },
   //轮播图的切换事件 
   swiperChange: function(e) {
-    console.log(e)
     //只要把切换后当前的index传给<swiper>组件的current属性即可 
     this.setData({
       swiperCurrent: e.detail.current
     })
   },
-  dotsChange: function(e) {
-    console.log(e)
+  dotsChange(e) {
     //只要把切换后当前的index传给<swiper>组件的current属性即可 
     this.setData({
       dotsCurrent: e.detail.current
     })
   },
   //点击指示点切换 
-  smallImgClick: function(e) {
-    console.log(e)
+  smallImgClick(e) {
     this.setData({
       swiperCurrent: e.currentTarget.id
     })
@@ -109,33 +106,57 @@ Page({
   //     })
   //   }
   // },
-  previewImage: function(e) {
-    // wx.showLoading({
-    //   title: '泡面就快好',
-    //   mask: true
-    // })
+  previewImage(e) {
+    wx.showLoading({
+      title: '海报生成中',
+      mask: true
+    })
     let that = this,
       ctx = wx.createCanvasContext('sharePoster', this),
       nameColor = '#3968B0',
       commentColor = '#595757',
       bgImgUrl = this.data.previewImageList[this.data.swiperCurrent],
-      windowWidth = wx.getSystemInfoSync().windowWidth,
-      windowHeight = wx.getSystemInfoSync().windowHeight,
-      info_width = wx.getSystemInfoSync().windowWidth, //底部信息区宽
-      info_height = 150, //底部信息区高
+      windowWidth = 3 * 375,//屏幕宽
+      windowHeight = 3 * 667,
+      info_width = 3 * 375,//底部信息区宽
+      info_height = 3 * 125, //底部信息区高
       info_x = 0, //底部信息区x
-      info_y = 460, //底部信息区y
-      code_x = (wx.getSystemInfoSync().windowWidth / 2) - 32, //二维码信息
-      code_y = 410,
-      code_width = 64,
-      code_height = 64,
-      name_x = 40,
-      name_y = 548,
-      headImg_x = 65,
-      headImg_y = 498,
-      line_x = 110,//评论区x
-      line_y = 490,//评论区首行y
-      lineArray = utils.canvasBreakLine(that.data.myCommentValue,ctx, 160, 14)//评论多行文本换行
+      info_y = 3 * 545, //底部信息区y 下移60
+      code_x = 3 * 135,
+      code_y = 3 * 460,
+      code_width = 3 * 100,
+      code_height = 3 * 100,
+      logo_x = 3 * 120,
+      logo_y = 3 * 570,
+      logo_width = 3 * 140,
+      logo_height = 3 * 33,
+      name_x,
+      name_y = 3 * 630,
+      headImg_x = 3 * 65,
+      headImg_y = 3 * 583,
+      line_x = 3 * 110, //评论区x
+      line_y = 3 * 575, //评论区首行y
+      lineArray = utils.canvasBreakLine(that.data.myCommentValue, ctx, 3 * 160, 3 * 14) //评论多行文本换行
+    switch (this.data.name.length) {
+      case 1:
+        name_x = 3 * 55;
+        break;
+      case 2:
+        name_x = 3 * 47;
+        break;
+      case 3:
+        name_x = 3 * 37;
+        break;
+      case 4:
+        name_x = 3 * 27;
+        break;
+      case 5:
+        name_x = 3 * 17;
+        break;
+      default:
+        name_x = 3 * 27;
+        break;
+    }
     wx.getImageInfo({
       src: bgImgUrl,
       success(res) {
@@ -146,44 +167,97 @@ Page({
         ctx.setFillStyle('#fff')
         ctx.fill()
         //画二维码
-        ctx.drawImage(that.data.codeImageUrl,code_x,code_y,code_width,code_height)
+        ctx.drawImage(that.data.codeImageUrl, code_x, code_y, code_width, code_height)
+        //画二维码提示
+        ctx.setFillStyle('#ccc')
+        ctx.setFontSize(3 * 13)
+        ctx.fillText('扫码查看案件详情 | 生成你的专属海报', 3 * 80, 3 * 650)
         //画姓名
         ctx.setFillStyle(nameColor)
-        ctx.setFontSize(18)
-        ctx.fillText(that.data.name,name_x,name_y)
+        ctx.setFontSize(3 * 18)
+        ctx.fillText(that.data.name, name_x, name_y)
         //画头像
         wx.downloadFile({
           url: that.data.headImgUrl,
           success(res) {
             ctx.save()
             ctx.beginPath()
-            ctx.arc(headImg_x, headImg_y, 25, 0, 2 * Math.PI)
-            ctx.setStrokeStyle('transparent')
-            ctx.stroke()
+            ctx.arc(headImg_x, headImg_y, 3 * 25, 0, 2 * Math.PI)
+            ctx.closePath();
+            ctx.fill();
             ctx.clip()
-            ctx.drawImage(res.tempFilePath,40, 473, 50, 50)
+            ctx.drawImage(res.tempFilePath, 3 * 40, 3 * 558, 3 * 50, 3 * 50)
             ctx.restore()
-            lineArray.forEach(function(item,index){
+            lineArray.forEach(function(item, index) {
               ctx.setFillStyle(commentColor)
-              ctx.setFontSize(14)
-              ctx.fillText(item, line_x, line_y + 17 * index)
+              ctx.setFontSize(3 * 14)
+              ctx.fillText(item, line_x, line_y + 3 * 17 * index)
             })
-            ctx.draw()
+            wx.getImageInfo({
+              src: that.data.miniProgramLogoUrl,
+              success(res) {
+                if(that.data.myCommentValue.length == 0){
+                  ctx.drawImage(res.path,logo_x,logo_y,logo_width,logo_height)
+                }
+                ctx.draw(false, () => {
+                  //生成图片
+                  that.canvasToTempFilePath(false)
+                })
+              },
+              fail(err) {
+                wx.hideLoading()
+              }
+            })
+            
           },
-          fail: function (err) {
-            console.log(err)
+          fail(err) {
+            wx.hideLoading()
           }
         })
-        that.setData({
-          onShowCanvas: true
-        })
       },
-      fail: function (err) {
-        console.log(err)
+      fail(err) {
+        wx.hideLoading()
       }
     })
   },
-  showAddComment: function(e) {
+  canvasToTempFilePath(saveDirect) {
+    let that = this
+    wx.canvasToTempFilePath({
+      x: 0,
+      y: 0,
+      width: 3 * 375,
+      height: 3 * 667,
+      destWidth: 3 * 375,
+      destHeight: 3 * 667,
+      canvasId: 'sharePoster',
+      success(res) {
+        that.scanImage(res.tempFilePath)
+      },
+      fail(){
+        wx.showToast({
+          title: '操作失败',
+          icon: 'fail',
+          duration: 1500
+        })
+      }
+    })
+  },
+  scanImage(tempFilePath){
+    wx.previewImage({
+      urls: [tempFilePath],
+      fail(){
+        wx.showToast({
+          title: '预览失败',
+          icon: 'none',
+          duration: 1500
+        })
+      },
+      complete(){
+        wx.hideLoading()
+      }
+    })
+  },
+  showAddComment(e) {
     this.setData({
       addCommentsFlag: true,
       focus: true,
@@ -191,7 +265,7 @@ Page({
       selection_end: this.data.myCommentLength
     })
   },
-  cancelAddComment: function(e) {
+  cancelAddComment(e){
     this.setData({
       addCommentsFlag: false,
       focus: false,
@@ -199,7 +273,7 @@ Page({
       selection_end: -1
     })
   },
-  sureAddComment: function(e) {
+  sureAddComment(e) {
     this.setData({
       myCommentValue: this.data.tempMyCommentValue,
       addCommentsFlag: false,
@@ -208,7 +282,7 @@ Page({
       selection_end: -1
     })
   },
-  bindCommentInput: function(e) {
+  bindCommentInput(e) {
     this.setData({
       myCommentLength: e.detail.cursor,
       tempMyCommentValue: e.detail.value.replace(/垃圾/g, '**')

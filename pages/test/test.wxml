@@ -43,7 +43,7 @@
       </view>
       <view class="comment-btn">
         <button bindtap="cancelAddComment">取消</button>
-        <button bindtap="sureAddComment">添加</button>
+        <button bindtap="sureAddComment" class="sure_add_comment">添加</button>
       </view>
     </view>
 </view>
