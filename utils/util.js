@@ -14,13 +14,13 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 //canvas绘制多行文本换行对齐
-function canvasBreakLine(text,ctx,wrapperWidth,fontSize){
+const canvasBreakLine = (text, ctx, wrapperWidth, fontSize) => {
   let lineArray = []
   let textareaWidth = Math.floor(wrapperWidth / fontSize)
   while (text.length > 0) {
     let temp = text.substr(0, textareaWidth)
-    while (ctx.measureText(temp).width < wrapperWidth && textareaWidth < text.length){
-      textareaWidth ++
+    while (ctx.measureText(temp).width < wrapperWidth && textareaWidth < text.length) {
+      textareaWidth++
       temp = text.substr(0, textareaWidth)
     }
     temp = text.substr(0, textareaWidth)
